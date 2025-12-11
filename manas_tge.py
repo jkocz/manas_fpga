@@ -136,7 +136,7 @@ try:
     sys.stdout.flush()
     #Set IP address of snap and set arp-table
     gbe_tx = fpga.gbes[tx_core_name]
-    gbe_tx.set_arp_table(mac_base+numpy.arange(256))
+    #gbe_tx.set_arp_table(mac_base+numpy.arange(256))
     gbe_tx.configure_core(mac_base+16,ip_base+16,fabric_port)
     #fpga.write(tx_core_name, gbe_tx.mac.packed(), mac_location)
     #fpga.write(tx_core_name, gbe_tx.ip_address.packed(), ip_location)
