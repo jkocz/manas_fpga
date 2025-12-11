@@ -5,6 +5,27 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 import casperfpga
 
+def init_10g(fpga):
+  mac_base0 = (2<<40) + (2<<32)
+  dest_macff= 255*(2**40) + 255*(2**32) + 255*(2**24) + 255*(2**16) + 255*(2**8) + 255
+  arp_table = [dest_macff for i in range(256)]  
+  dest_ip = 192*(2**24) + 168*(2**16) + 10*(2**8) + 3
+
+  fpga.write_int('eth_rst',1)
+  fpga.write_int('est_rst_sync',1)
+  
+  fpga.write_int('dest_ip',dest_ip)
+  fpga.write_int('dest_port',4000)
+
+  fpga_gbe = fpga.gbes['gbe0']
+  fpga_gbe.configure_core(mac_base0+1,src_ip,4001)
+
+  fpga.write_int('eth_rst',0)
+  fpga.write_int('eth_en',1)
+  fpga.write_int('est_rst_sync',0)
+
+  fpga.write_int('sync',1)
+
 def get_vacc_data(fpga, nchannels=2, nfft=16384):
   acc_n = fpga.read_uint('acc_cnt')
   chunk = nfft//nchannels
@@ -120,6 +141,8 @@ if __name__=="__main__":
   fpga.write_int('adc_chan_sel', opts.adc_chan_sel)
   time.sleep(0.1)
   print('done')
+
+  fpga.write_int('fft_shift',65535)
 
   print('Resetting counters...')
   fpga.write_int('cnt_rst',1) 
