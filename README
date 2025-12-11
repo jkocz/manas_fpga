@@ -1,0 +1,33 @@
+manas_spec.fpga: Original file, one clock is incorrect for the clock files on the current ZCU111. This requires fixing via casperfpga ones the RFDC is intialised. The commands to do this are:
+
+rfdc.set_pll_config(0, rfdc.ADC_TILE, rfdc.CLK_SRC_INTERNAL, 245.76, 3932.16)
+rfdc.shutdown(0,rfdc.ADC_TILE)
+rfdc.startup(0,rfdc.ADC_TILE)
+=========================================
+
+manas_spec_244: Updated file with what should be the correct clock (untested).
+
+The clock files to use are:
+
+LMX_REF_122M88_OUT_245M76.txt
+122M88_PL_122M88_SYSREF_7M68_clk5_12M8.txt
+
+They do not require an external reference.
+
+To initialize the system:
+
+fpga.upload_to_ram_and_program('manas_spec.fpg')
+rfdc = fpga.adcs['rfdc']
+c = rfdc.show_clk_files()
+
+rfdc.init()
+rfdc.progpll('lmx',c[2])
+rfdc.progpll('lmk',c[3])
+
+rfdc.status() 
+
+The status should show the first ADC in state 15, with PLL 1. 
+
+=========================================
+
+manas_tge2<...>.fpg: Hacked 10GbE test file. This can be initialized with the manas_tge.py script. 
