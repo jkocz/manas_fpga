@@ -28,6 +28,10 @@ rfdc.status()
 
 The status should show the first ADC in state 15, with PLL 1. 
 
+The SI5382 clock must also be set for the ethernet to work (this should happen on startup, but doesn't always work!). From on the device run:
+
+sudo ~/bin/prg_si5382_phyclk
+
 =========================================
 
 manas_tge2<...>.fpg: Hacked 10GbE test file. This can be initialized with the manas_tge.py script. 

@@ -9,7 +9,7 @@ def init_10g(fpga):
   mac_base0 = (2<<40) + (2<<32)
   dest_macff= 255*(2**40) + 255*(2**32) + 255*(2**24) + 255*(2**16) + 255*(2**8) + 255
   arp_table = [dest_macff for i in range(256)]  
-  dest_ip = 192*(2**24) + 168*(2**16) + 11*(2**8) + 3
+  dest_ip = 192*(2**24) + 168*(2**16) + 11*(2**8) + 4
 
   fpga.write_int('eth_rst',1)
   fpga.write_int('est_rst_sync',1)
